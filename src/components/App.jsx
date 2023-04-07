@@ -1,26 +1,28 @@
 import { Component } from 'react';
-import { ColorPicker } from './ColorPicker/ColorPicker';
-import { Tabs } from './Tabs/Tabs';
-import data from '../data/data.json';
+import { GlobalStyle } from './GlobalStyle';
+import { MaterialEditorForm } from './MaterialEditorForm/MaterialEditorForm';
+import { Layout } from './Layout';
+import * as API from 'services/api';
 
 export class App extends Component {
-  state = {};
+  state = {
+    materials: [],
+    isLoading: false,
+    error: false,
+  };
+
+  async addMaterial(values) {
+    const material = await API.addMaterial(values);
+    this.setState(state => ({ materials: [...state.materials, material] }));
+    console.log(material);
+  }
 
   render() {
-    const colorPickerOptions = [
-      { label: 'red', color: '#F44336' },
-      { label: 'green', color: '#4CAF50' },
-      { label: 'blue', color: '#2196F3' },
-      { label: 'grey', color: '#607D8B' },
-      { label: 'pink', color: '#3F5185' },
-    ];
-
     return (
-      <>
-        <Tabs items={data} />
-
-        {/* <ColorPicker title="Color Picker" colors={colorPickerOptions} /> */}
-      </>
+      <Layout>
+        <GlobalStyle />
+        <MaterialEditorForm onSubmit={this.addMaterial}></MaterialEditorForm>
+      </Layout>
     );
   }
 }
